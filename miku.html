@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miku Timer Lite</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --miku-teal: #39C5BB;
+            --miku-black: #000000;
+            --miku-white: #ffffff;
+            --miku-gray: #f4f4f4;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: none !important; /* Disable all transitions for speed */
+            animation: none !important;  /* Disable all animations */
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: sans-serif;
+            background-color: var(--miku-white);
+            color: var(--miku-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .lite-container {
+            width: 100%;
+            max-width: 400px;
+            border: 3px solid var(--miku-teal);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        #miku-01 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--miku-teal);
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #display {
+            font-family: 'VT323', monospace;
+            font-size: 5rem;
+            border: 2px solid var(--miku-black);
+            margin: 1rem 0;
+            padding: 10px;
+            background-color: var(--miku-gray);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background: var(--miku-white);
+            border: 2px solid var(--miku-teal);
+            color: var(--miku-teal);
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: var(--miku-teal);
+            color: var(--miku-white);
+        }
+
+        .custom-input {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--miku-black);
+            font-size: 1rem;
+        }
+
+        #main-action-btn {
+            width: 100%;
+            background: var(--miku-black);
+            color: var(--miku-white);
+            border: 2px solid var(--miku-black);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        #main-action-btn:hover {
+            background: #333;
+        }
+
+        .history {
+            text-align: left;
+            border-top: 2px solid var(--miku-teal);
+            padding-top: 1rem;
+        }
+
+        .history h2 {
+            font-size: 0.9rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--miku-teal);
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        .history-item {
+            padding: 4px 0;
+            border-bottom: 1px dotted #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lite-container">
+        <div id="miku-01">01</div>
+        <h1>Miku Timer Lite</h1>
+        
+        <div id="display">00:00</div>
+
+        <div class="controls">
+            <button onclick="setTimer(25)">25m</button>
+            <button onclick="setTimer(30)">30m</button>
+            <button onclick="setTimer(60)">1hr</button>
+            <button onclick="setTimer(120)">2hr</button>
+        </div>
+
+        <div class="custom-input">
+            <input type="number" id="custom-min" placeholder="Min" min="1">
+            <button onclick="setTimer(document.getElementById('custom-min').value)">Set</button>
+        </div>
+
+        <button id="main-action-btn" onclick="toggleTimer()">START</button>
+
+        <div class="history">
+            <h2>HISTORY</h2>
+            <ul id="history-list" class="history-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 0;
+        let timerId = null;
+        let isRunning = false;
+        let initialMinutes = 0;
+
+        const display = document.getElementById('display');
+        const actionBtn = document.getElementById('main-action-btn');
+        const historyList = document.getElementById('history-list');
+
+        function updateDisplay() {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function setTimer(minutes) {
+            minutes = parseInt(minutes);
+            if (isNaN(minutes) || minutes <= 0) return;
+            stopTimer();
+            initialMinutes = minutes;
+            timeLeft = minutes * 60;
+            updateDisplay();
+            actionBtn.textContent = 'START';
+        }
+
+        function toggleTimer() {
+            if (timeLeft <= 0) return;
+            isRunning ? stopTimer() : startTimer();
+        }
+
+        function startTimer() {
+            isRunning = true;
+            actionBtn.textContent = 'PAUSE';
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft <= 0) finishTimer();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            isRunning = false;
+            clearInterval(timerId);
+            actionBtn.textContent = 'START';
+        }
+
+        function finishTimer() {
+            stopTimer();
+            playDing();
+            addToHistory(initialMinutes);
+            alert('Time is up!');
+        }
+
+        function addToHistory(minutes) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const li = document.createElement('li');
+            li.className = 'history-item';
+            let label = minutes >= 60 ? (minutes/60).toFixed(1) + 'hr' : minutes + 'm';
+            if (label.endsWith('.0hr')) label = label.replace('.0hr', 'hr');
+            li.innerHTML = `<span>${label}</span> <span>${timeStr}</span>`;
+            historyList.insertBefore(li, historyList.firstChild);
+        }
+
+        function playDing() {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = context.createOscillator();
+            const gain = context.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(880, context.currentTime);
+            gain.gain.setValueAtTime(0.1, context.currentTime);
+            oscillator.connect(gain);
+            gain.connect(context.destination);
+            oscillator.start();
+            oscillator.stop(context.currentTime + 0.1);
+        }
+    </script>
+</body>
+</html>
