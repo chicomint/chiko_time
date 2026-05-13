@@ -1,4 +1,4 @@
 #  time.chiko.cc
 
 That's.....<br>
-<img src="okay.png">
+<img width="300" height="300" src="okay.png">
