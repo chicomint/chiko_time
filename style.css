@@ -1,0 +1,89 @@
+/* Custom styles for Chicomint's site */
+
+.sky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.falling-star {
+    position: absolute;
+    top: -100px;
+    width: 60px;
+    height: auto;
+    animation: fall 8s linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+/* Stagger the animations */
+.falling-star:nth-child(1) { animation-delay: 0s; }
+.falling-star:nth-child(2) { animation-delay: 2s; }
+.falling-star:nth-child(3) { animation-delay: 1s; }
+.falling-star:nth-child(4) { animation-delay: 3s; }
+.falling-star:nth-child(5) { animation-delay: 4s; }
+
+@keyframes opacityPulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.timer-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+#timer-display {
+    font-size: 5rem;
+    text-align: center;
+    margin: 1rem 0;
+    color: rgb(127, 184, 42);
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 10px rgba(127, 184, 42, 0.2);
+}
+
+.controls, .presets, .custom-input {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.custom-input input {
+    width: 80px;
+    text-align: center;
+}
+
+button {
+    min-width: 80px;
+    cursor: pointer;
+}
+
+#start-btn {
+    background-color: rgb(127, 184, 42);
+    border-color: rgb(127, 184, 42);
+    color: white;
+}
+
+#start-btn:hover {
+    background-color: rgb(81, 147, 31);
+}
+
+.nav-links a {
+    margin-right: 5px;
+}
+
+.active-link {
+    color: rgb(127, 184, 42) !important;
+}

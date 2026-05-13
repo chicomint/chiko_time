@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>chicomint'site - Timer</title>
+    <link rel="shortcut icon" type="image/x-icon" href="media/chiki.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css?v=1.7">
+    <link rel="stylesheet" href="sakura.css" media="screen" />
+    <link rel="stylesheet" href="sakura-dark.css" media="screen and (prefers-color-scheme: dark)" />
+</head>
+<body>
+    <div class="sky">
+        <img src="miku.png" class="falling-star" style="left: 10%;">
+        <img src="miku.png" class="falling-star" style="left: 30%;">
+        <img src="miku.png" class="falling-star" style="left: 50%;">
+        <img src="miku.png" class="falling-star" style="left: 70%;">
+        <img src="miku.png" class="falling-star" style="left: 90%;">
+    </div>
+
+    <h1>time.chiko.cc</h1>
+    <p id="fortune-display" style="font-style: italic; color: #1d7484; margin-bottom: 10px; min-height: 1.5em;"></p>
+    <hr>
+
+    <div class="timer-container">
+        <div id="timer-display">00:00:00</div>
+
+        <div class="presets">
+            <button data-seconds="600">10m</button>
+            <button data-seconds="1500">25m</button>
+            <button data-seconds="1800">30m</button>
+            <button data-seconds="3600">1h</button>
+            <button data-seconds="7200">2h</button>
+        </div>
+
+        <div class="custom-input">
+            <input type="number" id="custom-h" placeholder="HH" min="0" max="99">
+            <input type="number" id="custom-m" placeholder="MM" min="0" max="59">
+            <input type="number" id="custom-s" placeholder="SS" min="0" max="59">
+            <button id="set-custom-btn">Set Custom</button>
+        </div>
+
+        <div class="controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+            <p id="sky-msg" style="margin-bottom: 5px; display: none;">o(>ω<)o</p>
+            <button id="toggle-sky-btn" style="font-size: 0.8em; opacity: 0.7;">Toggle Animations</button>
+        </div>
+    </div>
+
+    <footer>
+        <hr>
+        <a href="https://chiko.cc">Go to homepage.</a>
+        <p style="animation: opacityPulse 2s ease-out; animation-iteration-count: infinite; opacity: 1; color: rgb(81, 147, 31); margin-top: 10px;">
+            @Chicomint 2022-untill i die&lt;3
+        </p>
+    </footer>
+
+    <script src="timer.js"></script>
+</body>
+</html>
